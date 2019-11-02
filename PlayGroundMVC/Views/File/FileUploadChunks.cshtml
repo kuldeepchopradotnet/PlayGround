@@ -1,0 +1,96 @@
+﻿@*this is how to use model in view*@
+@model PlayGroundMVC.Models.FileModel
+@{
+    ViewBag.Title = "File Upload";
+}
+ASP MVC and changing url of posted form
+<h2>
+    Index
+    @if (ViewBag.Message != null)
+    {
+        @ViewBag.Message;
+    }
+</h2>
+
+@*create a form using razor syntax*@
+ encType="multipart/form-data"
+No characters are encoded. This value is required when you are using forms that have a file upload control
+html attribute to all multifile upload
+@using (Html.BeginForm("FileUploadChunks", "File", FormMethod.Post, new { encType = "multipart/form-data", @id = "formId" }))
+{
+    @Html.TextBoxFor(m => m.FileName);
+    @Html.TextBoxFor(m => m.Files, new { @Type = "file", @Name = "File", @multiple = "multiple" });
+    //Html.TextBoxFor(m => m.File, new { @Type = "file" });
+    <input type="submit" value="Upload" id="submitId">
+}
+use of section Scripts
+and render this in layout see layout
+RenderSection("scripts", required: false)
+@section Scripts{
+
+    <script>
+
+        $("form#formId").submit(function (event) {
+            debugger;
+            //all validation can be put here of jquery
+
+            //send ajax call to server
+
+            //get all files
+
+            var files = $("#Files").get(0).files;
+            // loop through files
+            for (i = 0; i < files.length; i++) {
+
+                // create chucks of file and then send single chucks to upload
+                var chunkArr = [];
+                var chunksize = 102400
+                var postion = 0;
+                var endPostion = chunksize;
+                while (postion < files[i].size) {
+                    chunkArr.push(files[i].slice(postion, endPostion));
+                    postion = endPostion;
+                    endPostion = postion + chunksize;
+                }
+
+
+
+
+                var formData = new FormData();
+                formData.append("file", chunkArr[0],"FileNameTest");
+
+                console.log(chunkArr);
+
+                $.ajax({
+                    url: "/File/FileUploadChunks",
+                    data: formData,
+                    type: "Post",
+                    contentType: false,
+                    processData:false,
+                    sucess: function (data) { debugger; },
+                    error: function (err) { }
+
+                });
+
+
+
+
+            }
+
+
+
+
+
+
+
+            //prevent the action
+            event.preventDefault();
+        });
+
+        $.ajax({
+
+        })
+
+
+    </script>
+}

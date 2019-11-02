@@ -1,7 +1,25 @@
-﻿
+﻿@*this is how to use model in view*@
+@model PlayGroundMVC.Models.FileModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "File Upload";
 }
+ASP MVC and changing url of posted form
+<h2>
+    Index
+    @if (ViewBag.Message != null)
+    {
+        @ViewBag.Message;
+    }
+</h2>
 
-<h2>Index</h2>
+@*create a form using razor syntax*@
+ encType="multipart/form-data"
+No characters are encoded. This value is required when you are using forms that have a file upload control
+@using (Html.BeginForm("FileUploadModel", "File", FormMethod.Post, new { encType = "multipart/form-data" }))
+{
 
+    @Html.TextBoxFor(m => m.FileName);
+    @Html.TextBoxFor(m => m.File, new { @Type = "file", @Name = "File" });
+    //Html.TextBoxFor(m => m.Files, new { @Type = "file" });
+    <input type="submit" value="Upload" id="submitId">
+}

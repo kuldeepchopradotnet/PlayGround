@@ -11,6 +11,11 @@ namespace PlayGroundMVC.Controllers
     public class FileController : Controller
     {
         // GET: File
+        // uploading a file using html razor syntax , here is two approach
+        // 1 submit on the same overload method index and display the message-- not need
+        //2 submit to the other method like fileuplod and send tempdata to index to display the message -need
+        // i set up the fileuplad view to index see will it redirect to index method or just show the view page of index
+
         public ActionResult Index()
         {
             return View();
@@ -22,11 +27,11 @@ namespace PlayGroundMVC.Controllers
         {
             try
             {
-                bool isView = false;
+                bool isView = true;
                 // all files will be saved once not in chunks
                 // Get files from http request
                 HttpFileCollectionBase files = Request.Files;
-
+                var getNameIfExist = Request.Form["FileName"];
                 if (files.Count > 0)
                 {
                     // upload file by individually
@@ -48,7 +53,8 @@ namespace PlayGroundMVC.Controllers
 
                 if (isView)
                 {
-                    return View();
+                    ViewBag.Message = "file uploaded.";
+                    return View("Index");
                 }
                 else
                 {
@@ -78,7 +84,7 @@ namespace PlayGroundMVC.Controllers
         {
             try
             {
-                bool isView = false;
+                bool isView = true;
                 // you can send list of file or single file this is demo of using both of them
                 if (fileModel.File != null)
                 {
@@ -101,7 +107,8 @@ namespace PlayGroundMVC.Controllers
                 }
                 if (isView)
                 {
-                    return View();
+                    ViewBag.Message = "file uploaded.";
+                    return View("Index");
                 }
                 else
                 {
@@ -119,16 +126,51 @@ namespace PlayGroundMVC.Controllers
             return null;
         }
 
-        // get file as take direct parm of file
-        // HttpPostedFile not working
-        [HttpPost, ActionName("FileUploadObj")]
-        public ActionResult FileUpload(HttpPostedFileBase file)
+
+        [HttpGet, ActionName("FileUploadChunks")]
+        public ActionResult FileUploadChunks()
         {
             //working
-            return null;
+            return View();
         }
 
-            void UploadFile(HttpPostedFileBase file)
+        // get file as take direct parm of file
+        // HttpPostedFile not working
+        [HttpPost, ActionName("FileUploadChunks")]
+        public ActionResult FileUpload(HttpPostedFileBase file)
+        {
+
+            var filePath = GetPath(file.FileName);
+            var bytes = GetByte(file.InputStream);
+            using (var fs = new FileStream(filePath, FileMode.Append)) {
+
+                fs.Write(bytes,0, bytes.Length);
+            }
+
+
+                //working
+                return null;
+        }
+        byte[] GetByte(Stream stream)
+        {
+
+            byte[] buffer = new byte[stream.Length];
+            using (var ms = new MemoryStream()) {
+                int read;
+                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0) {
+                    ms.Write(buffer,0,read);
+                }
+                return ms.ToArray();
+
+            }
+
+        }
+
+
+
+
+
+        void UploadFile(HttpPostedFileBase file)
         {
             string fileName = GetPath(file.FileName);
             file.SaveAs(fileName);

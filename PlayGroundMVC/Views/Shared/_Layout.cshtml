@@ -28,6 +28,8 @@
         </div>
     </div>
     <div class="container body-content">
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
         @RenderBody()
         <hr />
         <footer>
@@ -37,6 +39,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    https://stackoverflow.com/questions/23327578/what-is-rendersection-in-asp-net-mvc
+    @RenderSection("scripts", required: true)
 </body>
 </html>
