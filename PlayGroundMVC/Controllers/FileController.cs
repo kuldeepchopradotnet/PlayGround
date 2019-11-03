@@ -1,9 +1,11 @@
 ﻿using PlayGroundMVC.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace PlayGroundMVC.Controllers
@@ -180,9 +182,19 @@ namespace PlayGroundMVC.Controllers
         {
             // path is used to combine a path and name of file
             // server is used to map a path form local directory of folder
-            return Path.Combine(Server.MapPath("~/Uploads"), fileName);
+            return Path.Combine(Server.MapPath(ReadWebConfigKey("UploadFolder")), fileName);
         }
-
+        /// <summary>
+        /// Read Value form web.config file
+        /// </summary>
+        /// <param name="KeyName"></param>
+        /// <returns></returns>
+        string ReadWebConfigKey(string KeyName) {
+            // two class object to read a key value form webconfig "UploadFolder"
+            var val = ConfigurationManager.AppSettings[KeyName];
+            var val2 = WebConfigurationManager.AppSettings[KeyName];
+            return val2;
+        }
 
 
     }

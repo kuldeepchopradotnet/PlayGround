@@ -27,7 +27,6 @@ use of section Scripts
 and render this in layout see layout
 RenderSection("scripts", required: false)
 @section Scripts{
-
     <script>
         // fileStore to manage all multiple files / uploaded
         var fileStore = {
@@ -94,22 +93,16 @@ RenderSection("scripts", required: false)
                         }
                         else {
                             uploadFile(fileStore, (fileIdx + 1))
-
                         }
-                        
                         alert("file chunk uploaded ");
                     }
                     else {
-
                         uploadFileChunk(fileStore, (index + 1), fileIdx)
                     }
                 },
                 error: function (err) { }
-
             });
 
         }
-
-
     </script>
 }
