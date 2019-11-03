@@ -29,20 +29,21 @@ RenderSection("scripts", required: false)
 @section Scripts{
 
     <script>
-
+        // fileStore to manage all multiple files / uploaded
+        var fileStore = {
+            fileObj: []
+        }
         $("form#formId").submit(function (event) {
             debugger;
             //all validation can be put here of jquery
-
             //send ajax call to server
-
             //get all files
-
             var files = $("#Files").get(0).files;
             // loop through files
             for (i = 0; i < files.length; i++) {
-
                 // create chucks of file and then send single chucks to upload
+                //var fileArr = [];
+                var fileName = files[i].name;
                 var chunkArr = [];
                 var chunksize = 102400
                 var postion = 0;
@@ -52,44 +53,62 @@ RenderSection("scripts", required: false)
                     postion = endPostion;
                     endPostion = postion + chunksize;
                 }
-
-
-
-
-                var formData = new FormData();
-                formData.append("file", chunkArr[0],"FileNameTest");
-
-                console.log(chunkArr);
-
-                $.ajax({
-                    url: "/File/FileUploadChunks",
-                    data: formData,
-                    type: "Post",
-                    contentType: false,
-                    processData:false,
-                    sucess: function (data) { debugger; },
-                    error: function (err) { }
-
-                });
-
-
-
-
+                // push to filestore
+                fileStore.fileObj.push(
+                    {
+                        fileArr: chunkArr,
+                        fileName: fileName,
+                    }
+                )
+                //clear the chuncks
+                chunkArr = [];
+               // console.log(fileArr);
+               // uploadFile(fileArr,1,fileName);
+                ///var totalFiles = fileStore.fileObj.length;
             }
-
-
-
-
-
-
-
+            
+            uploadFile(fileStore, 1);
             //prevent the action
             event.preventDefault();
         });
 
-        $.ajax({
+        // Resursive method that will be called when response will get form api or server
+        function uploadFile(fileStore, fileIdx) {
+            uploadFileChunk(fileStore, 1, fileIdx)
+        }
+        function uploadFileChunk(fileStore, index, fileIdx) {
+            var formData = new FormData();
+            var chunkArr = fileStore.fileObj[fileIdx - 1].fileArr;
+            var fileName = fileStore.fileObj[fileIdx - 1].fileName;
+            formData.append("file", chunkArr[index-1], fileName);
+            $.ajax({
+                url: "/File/FileUploadChunks",
+                data: formData,
+                type: "Post",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (chunkArr.length === index) {
+                        if (fileStore.fileObj.length === fileIdx) {
+                            alert("all file uploaded")
+                        }
+                        else {
+                            uploadFile(fileStore, (fileIdx + 1))
 
-        })
+                        }
+                        
+                        alert("file chunk uploaded ");
+                    }
+                    else {
+
+                        uploadFileChunk(fileStore, (index + 1), fileIdx)
+                    }
+                },
+                error: function (err) { }
+
+            });
+
+        }
 
 
     </script>

@@ -148,8 +148,8 @@ namespace PlayGroundMVC.Controllers
             }
 
 
-                //working
-                return null;
+            //working
+            return Json(new { msg = "file chunck uploaded"});
         }
         byte[] GetByte(Stream stream)
         {
