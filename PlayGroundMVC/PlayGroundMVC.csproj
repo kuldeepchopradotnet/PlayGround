@@ -134,11 +134,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FormDemoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\FileModel.cs" />
+    <Compile Include="Models\FormDemoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +181,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\File\Index.cshtml" />
     <Content Include="Views\File\FileUploadChunks.cshtml" />
+    <Content Include="Views\FormDemo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

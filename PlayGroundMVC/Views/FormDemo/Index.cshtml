@@ -1,0 +1,36 @@
+﻿@model  PlayGroundMVC.Models.FormDemoModel
+@{
+    ViewBag.Title = "Index";
+    // on client side validation handle
+    // see layout to enable this
+    Html.EnableClientValidation(true);
+}
+
+<h2>Form demo with validation on Property</h2>
+
+<h3>@ViewBag.Message ?? ""</h3>
+@using (Html.BeginForm("Index", "FormDemo", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        @*/aria-describedby="emailHelp"*@
+        @Html.TextBoxFor(m => m.Email, htmlAttributes: new { @class = "form-control", aria_describedby = "emailHelp", placeholder = "Enter email" })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+}
+How to enable client side validation in ASP.NET MVC?
+   https://www.tutorialsteacher.com/articles/enable-client-side-valiation-in-mvc
