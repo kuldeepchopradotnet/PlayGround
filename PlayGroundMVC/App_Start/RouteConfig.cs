@@ -18,6 +18,14 @@ namespace PlayGroundMVC
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            //  create a custom route name 
+            routes.MapRoute(
+                name: "formdemo",
+                url: "FormDemo/Index",
+                defaults: new { controller = "FormDemo", action= "Index"}
+                );
+
         }
     }
 }
