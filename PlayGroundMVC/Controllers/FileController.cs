@@ -153,6 +153,38 @@ namespace PlayGroundMVC.Controllers
             //working
             return Json(new { msg = "file chunck uploaded"});
         }
+
+        [HttpGet]
+        public ActionResult FileDownload(string fileName) {
+
+            try
+            {
+                var pathOfFile = GetPath(fileName);
+                // MimeMapping to get mime type 
+                var contentType = System.Web.MimeMapping.GetMimeMapping(fileName);
+                return File(pathOfFile, contentType, fileName);
+                // var readFile = new FileStream(pathOfFile,FileMode.Open);
+
+              
+                //var ms = new MemoryStream();
+                // readFile.CopyTo(ms);
+                //ms.WriteTo(readFile);
+                //readFile.Close();
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return null;
+        }
+
+
         byte[] GetByte(Stream stream)
         {
 
@@ -195,6 +227,9 @@ namespace PlayGroundMVC.Controllers
             var val2 = WebConfigurationManager.AppSettings[KeyName];
             return val2;
         }
+
+        
+        
 
 
     }

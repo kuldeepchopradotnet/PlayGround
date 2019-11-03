@@ -46,6 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MimeMapping, Version=1.0.1.17, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeMapping.1.0.1.17\lib\netstandard2.0\MimeMapping.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />

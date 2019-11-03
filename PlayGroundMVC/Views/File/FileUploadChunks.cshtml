@@ -23,6 +23,10 @@ html attribute to all multifile upload
     //Html.TextBoxFor(m => m.File, new { @Type = "file" });
     <input type="submit" value="Upload" id="submitId">
 }
+fileName<input type="text" id="inputFile" />
+<img id="previewId" />
+<embed id="emId" />
+
 use of section Scripts
 and render this in layout see layout
 RenderSection("scripts", required: false)
@@ -61,11 +65,11 @@ RenderSection("scripts", required: false)
                 )
                 //clear the chuncks
                 chunkArr = [];
-               // console.log(fileArr);
-               // uploadFile(fileArr,1,fileName);
+                // console.log(fileArr);
+                // uploadFile(fileArr,1,fileName);
                 ///var totalFiles = fileStore.fileObj.length;
             }
-            
+
             uploadFile(fileStore, 1);
             //prevent the action
             event.preventDefault();
@@ -79,7 +83,7 @@ RenderSection("scripts", required: false)
             var formData = new FormData();
             var chunkArr = fileStore.fileObj[fileIdx - 1].fileArr;
             var fileName = fileStore.fileObj[fileIdx - 1].fileName;
-            formData.append("file", chunkArr[index-1], fileName);
+            formData.append("file", chunkArr[index - 1], fileName);
             $.ajax({
                 url: "/File/FileUploadChunks",
                 data: formData,
@@ -104,5 +108,40 @@ RenderSection("scripts", required: false)
             });
 
         }
+        //https://stackoverflow.com/questions/4545311/download-a-file-by-jquery-ajax
+        function downlaodFile(fileName) {
+            fetch("/File/FileDownload?fileName=" + fileName).then(res => res.blob()).then(
+                blob => {
+                    debugger;
+                    //create blob to blob url
+                    const url = window.URL.createObjectURL(blob);
+                    if (blob.type.includes("jpeg")) {
+                        $("#previewId").attr("src", url);
+                    }
+                    else {
+
+                        $("#emId").attr("src", url);
+                    }
+
+                }
+
+            )
+
+            //$.ajax({
+            //    url: "/File/FileDownload?fileName="+fileName,
+            //    type: "Get",
+            //    success: function (data) {
+            //        debugger;
+            //    },
+            //    error: function (err) { }
+            //});
+        }
+        $("#inputFile").blur(function () {
+
+            var fileName = $(this).val();
+            downlaodFile(fileName);
+
+        })
+
     </script>
 }
